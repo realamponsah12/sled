@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block main_content %}
+<div class="breadcrumb-section breadcrumb-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2 text-center">
+                <div class="breadcrumb-text">
+                    <p>Inclusive Education</p>
+                    <h1>Foundation</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<div class="row">
+    <div class="col-3">
+
+    </div>
+    <div class=" col-6">
+        <h2>Post Blog Articles</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %} 
+              {{ form|crispy }}  
+          <button type="submit">Upload</button>
+          </form>{% if img_obj %}  <h3>Succesfully uploaded : {{img_obj.title}}</h3> 
+           <img src="{{ img_obj.image.url}}" alt="connect" style="max-height:300px">
+          {% endif %}
+    </div>
+</div>
+
+{% endblock main_content %}

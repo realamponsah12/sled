@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% block main_content %}
+	<!-- end search arewa -->
+	
+	<!-- breadcrumb-section -->
+	<div class="breadcrumb-section breadcrumb-bg">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 offset-lg-2 text-center">
+					<div class="breadcrumb-text">
+						<p>Read the Details on</p>
+						<h1>{{blog.title}}</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end breadcrumb section -->
+	
+	<!-- single article section -->
+	<div class="mt-150 mb-150">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8">
+					<div class="single-article-section">
+						<div class="single-article-text">
+							<div 
+							style="background-image: url({{blog.image.url}});
+							  height: 450px;
+							  background-size: cover;
+								background-position: center;
+								border-radius: 5px;
+								margin-bottom: 20px;
+															"
+							></div>
+							<p class="blog-meta">
+								<span class="author"><i class="fas fa-user"></i> Admin</span>
+								<span class="date"><i class="fas fa-calendar"></i>{{blog.created_at}}</span>
+							</p>
+							<h2>{{blog.title}}</h2>
+							<p style="font-size: medium;">{{blog.content|linebreaks}}</p>
+						</div>
+						<div class="comments-list-wrap">
+							<h3 class="comment-count-title">{{comments.count}} Comments</h3>
+							<div id='comm_list' class="comment-list">
+								{% for comment in comments %}
+								<div class="single-comment-body">
+									<div class="comment-user-avater">
+										<img src="assets/img/avaters/avatar1.png" alt="">
+									</div>
+									<div class="comment-text-body">
+										<h4>{{comment.name}}<span class="comment-date">{{comment.created_at }}</span></h4>
+
+										<p>{{comment.comment}}</p>
+									</div>
+									
+								</div>
+								{% endfor %}
+								<div id='scrt'>
+
+								</div>
+							</div>
+						</div>
+						
+
+						<div   class="comment-template">
+							<h4>Leave a comment</h4>
+							<p>If you have a comment don't hesitate to send us your opinion.</p>
+							<form id="sub_form">
+
+								{% csrf_token %}
+								<p>
+									<input type="text" id="c_name" required placeholder="Your Name">
+									<input type="email" id="c_mail" required placeholder="Your Email">
+								</p>
+								<p><textarea required name="comment" maxlength="500" id="comment" cols="30" rows="10" placeholder="Your Message"></textarea></p>
+								<p><input type="submit" value="Submit"></p>
+							</form>
+						</div>	
+					</div>
+				</div>
+				<div class="col-lg-4">
+					<div class="sidebar-section">
+						<div class="recent-posts">
+							<h4>Recent Posts</h4>
+							<ul>
+								{% for post in rc %}
+								
+								<li><a href="{% url 'display_blog' post.id %}">{{post.title}}</a></li>
+								{% endfor %}
+							</ul>
+						</div>
+						
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end single article section -->
+
+	<!-- logo carousel -->
+	{% endblock main_content %}
+
+{% block custom_js %}
+<script>
+$('#sub_form').submit(function(e){
+
+	e.preventDefault();
+ 	var name, comment, email;
+	name=document.getElementById('c_name').value;
+	comment = document.getElementById('comment').value;
+	email=document.getElementById('c_mail').value;
+	var blog = {{blog.id}};
+	$.ajax({
+		url:'{% url 'add_comment' %}',
+			method:'POST',
+			data:{
+				'email': email, name, comment,blog,
+				csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+			},
+		success: function(resp){
+			location.reload()
+			document.getElementById('scrt').scrollIntoView({
+            behavior: 'auto',
+            block: 'center',
+            inline: 'center'
+        });
+		}
+			
+	})
+})
+</script>
+{% endblock custom_js %}

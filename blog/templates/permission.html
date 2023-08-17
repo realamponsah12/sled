@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block main_content %}
+<div class="breadcrumb-section breadcrumb-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2 text-center">
+                <div class="breadcrumb-text">
+                    <p>Admin Authentication</p>
+                    <h1>Log in Now</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<div class="row">
+    <div class="col-3">
+
+    </div>
+    <div class=" col-6">
+        <h2>What Is Your Passion?</h2>
+        <div class="contact-form">
+            <form  id="fruitkha-contact">
+                {% csrf_token %}
+                <p>
+                    <input type="text" placeholder="Admin Username" name="name" id="name">
+                    <br>
+                    <input type="text" placeholder="passion" name="password" id="email">
+                </p>
+              
+                <p><input type="submit" value="Submit"></p>
+                <br>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock main_content %}
+
+{% block custom_js %}
+<script>
+    $('#fruitkha-contact').submit(function(e){
+        e.preventDefault()
+        var email =  document.getElementById('email').value;
+        var name =  document.getElementById('name').value;
+        $.ajax({
+		url:'{% url 'permission' %}',
+			method:'POST',
+			data:{
+				'email':email, name,
+				csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+			},
+        success: function(resp){
+            if (resp == 1){
+                $.ajax({
+                    window.location.href =  "{% url 'upload' %}"
+                })
+            }
+            else{
+                alert('oops! Your passions doesnt match ours.. sorry')
+            }
+            }
+        })
+    })
+</script>
+{% endblock custom_js %}

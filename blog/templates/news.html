@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main_content %}
+	<!--PreLoader-->
+
+	<!-- end search arewa -->
+	
+	<!-- breadcrumb-section -->
+	<div class="breadcrumb-section breadcrumb-bg">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-9 offset-lg-2 text-center">
+					<div class="breadcrumb-text">
+						<p>welcome to</p>
+						<h1>SLED FOUNDATION BLOG</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end breadcrumb section -->
+
+	<!-- latest news -->
+	<div class="latest-news mt-150 mb-150">
+		<div class="container">
+			<div class="row">
+			
+				
+				{% for blog in page_obj.object_list %}
+				<div class="col-lg-4 col-md-6">
+					<div class="single-latest-news">
+						
+						<a href="{% url 'display_blog' blog.id %}"><div class="latest-news-bg" style="background-image: url('{{ blog.image.url}}');">
+
+						</div></a>
+						<div class="news-text-box">
+							<h3><a href="{% url 'display_blog' blog.id %}">{{blog.title|truncatewords:8}}</a></h3>
+							<p class="blog-meta">
+								<span class="author"><i class="fas fa-user"></i> Andy</span>
+								<span class="date"><i class="fas fa-calendar"></i>{{blog.created_at}}</span>
+							</p>
+							<p class="excerpt">{{blog.content|truncatewords:20}}</p>
+							<a href="{% url 'display_blog' blog.id %}" class="read-more-btn">read more <i class="fas fa-angle-right"></i></a>
+						</div>
+					</div>
+				</div>
+				{% endfor %}
+			
+			
+			</div>
+			<center>
+				{%if page_obj.has_previous %} {# whether the previous page exists #}
+					<a href="?page={{page_obj.previous_page_number}}">< Previous |</a> {# link to the prev page #}
+				{% endif %}
+				 {# the current page number #}
+			   
+				{%if page_obj.has_next %} {# whether the next page exists #}
+					<a href="?page={{page_obj.next_page_number}}">Next ></a> {# link to the next page #}
+				{% endif %}
+			</center>
+		</div>
+	</div>
+	<!-- end latest news -->
+
+	<!-- logo carousel -->
+	
+	<!-- end logo carousel -->
+
+	<!-- footer -->
+	
+	<!-- end copyright -->
+	
+	<!-- jquery -->
+{% endblock main_content %}
+{% block custom_js %}
+<script>
+	function getblog(blog_id){
+		alert(blog_id)
+	}
+</script>
+{% endblock custom_js %}
